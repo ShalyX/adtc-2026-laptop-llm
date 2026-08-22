@@ -3,6 +3,9 @@ model/*.gguf
 model/*.bin
 model/*.safetensors
 
+# Local benchmark workspace
+.bench/
+
 # macOS
 .DS_Store
 
@@ -14,3 +17,4 @@ __pycache__/
 # Local profiler output
 submission.json
 audit.json
+verdict.json

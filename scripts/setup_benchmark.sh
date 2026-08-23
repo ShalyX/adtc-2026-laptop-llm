@@ -72,11 +72,12 @@ cmake -S "$LLAMA_CPP" -B "$LLAMA_CPP/build" \
   -DGGML_NATIVE=ON \
   -DLLAMA_CURL=OFF
 
-# Keep build parallelism deliberately low. An unrestricted `-j` can make WSL
-# launch enough C++ compiler processes to exhaust RAM and get cc1plus OOM-killed.
-echo "building llama.cpp with $BUILD_JOBS parallel job(s)…"
+# The ADTC profiler only requires llama-bench. Building llama-cli also pulls in
+# the server/UI targets in current llama.cpp, which wastes RAM and can fail on
+# WSL for reasons unrelated to the benchmark. Keep the target minimal.
+echo "building llama-bench with $BUILD_JOBS parallel job(s)…"
 cmake --build "$LLAMA_CPP/build" --config Release --parallel "$BUILD_JOBS" \
-  --target llama-bench llama-cli
+  --target llama-bench
 
 cat > "$BENCH/env.sh" <<EOF
 export ADTC_REPO="$ROOT"

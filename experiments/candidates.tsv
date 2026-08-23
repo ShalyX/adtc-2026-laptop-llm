@@ -1,5 +1,5 @@
 id	repo	filename	params	quantization	license	expected_size_gb
-qwen3-0.6b-q4km	bartowski/Qwen_Qwen3-0.6B-GGUF	Qwen3-0.6B-Q4_K_M.gguf	0.6B	Q4_K_M	Apache-2.0	0.48
+qwen3-0.6b-q4km	bartowski/Qwen_Qwen3-0.6B-GGUF	Qwen_Qwen3-0.6B-Q4_K_M.gguf	0.6B	Q4_K_M	Apache-2.0	0.48
 qwen3-1.7b-q4km	ggml-org/Qwen3-1.7B-GGUF	Qwen3-1.7B-Q4_K_M.gguf	1.7B	Q4_K_M	Apache-2.0	1.28
 smollm3-3b-q4km	ggml-org/SmolLM3-3B-GGUF	SmolLM3-Q4_K_M.gguf	3B	Q4_K_M	Apache-2.0	1.92
 qwen3-4b-q4km	ggml-org/Qwen3-4B-GGUF	Qwen3-4B-Q4_K_M.gguf	4B	Q4_K_M	Apache-2.0	2.50

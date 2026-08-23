@@ -5,6 +5,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BENCH="$ROOT/.bench"
 LLAMA_CPP="$BENCH/llama.cpp"
 VENV="$BENCH/venv"
+BUILD_JOBS="${ADTC_BUILD_JOBS:-2}"
 
 mkdir -p "$BENCH"
 
@@ -13,6 +14,28 @@ if command -v apt-get >/dev/null 2>&1; then
   if [[ "${EUID:-$(id -u)}" -ne 0 ]]; then
     SUDO="sudo"
   fi
+
+  # Ubuntu/WSL may start unattended-upgrades in the background. Never delete
+  # dpkg lock files; wait briefly for the package manager to become available.
+  if command -v fuser >/dev/null 2>&1; then
+    echo "checking apt/dpkg availability…"
+    for _ in $(seq 1 60); do
+      if ! $SUDO fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1 && \
+         ! $SUDO fuser /var/lib/dpkg/lock >/dev/null 2>&1; then
+        break
+      fi
+      sleep 2
+    done
+    if $SUDO fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1 || \
+       $SUDO fuser /var/lib/dpkg/lock >/dev/null 2>&1; then
+      echo "error: apt/dpkg is still busy (often unattended-upgrades)." >&2
+      echo "Wait for it to finish, then rerun this script. Do not delete lock files." >&2
+      exit 1
+    fi
+  fi
+
+  # Repair any package configuration left incomplete by an interrupted apt run.
+  $SUDO dpkg --configure -a
   $SUDO apt-get update
   $SUDO apt-get install -y build-essential cmake git curl ca-certificates
 else
@@ -48,7 +71,12 @@ cmake -S "$LLAMA_CPP" -B "$LLAMA_CPP/build" \
   -DCMAKE_BUILD_TYPE=Release \
   -DGGML_NATIVE=ON \
   -DLLAMA_CURL=OFF
-cmake --build "$LLAMA_CPP/build" --config Release -j --target llama-bench llama-cli
+
+# Keep build parallelism deliberately low. An unrestricted `-j` can make WSL
+# launch enough C++ compiler processes to exhaust RAM and get cc1plus OOM-killed.
+echo "building llama.cpp with $BUILD_JOBS parallel job(s)…"
+cmake --build "$LLAMA_CPP/build" --config Release --parallel "$BUILD_JOBS" \
+  --target llama-bench llama-cli
 
 cat > "$BENCH/env.sh" <<EOF
 export ADTC_REPO="$ROOT"

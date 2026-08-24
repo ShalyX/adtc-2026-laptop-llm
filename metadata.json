@@ -1,37 +1,37 @@
 {
-  "team_id": "your-team-id",
-  "domain": "coding_assistants",
+  "team_id": "ShalyX",
+  "domain": "agriculture",
   "language_scope": ["en"],
-  "african_alpha_claim": false,
+  "african_alpha_claim": true,
   "budget_laptop_claim": true,
   "submitter": {
-    "name": "your-name",
-    "email": "your-email@domain.com",
-    "github_handle": "your-github"
+    "name": "Shallom Alabi",
+    "email": "shallomalabi89@gmail.com",
+    "github_handle": "ShalyX"
   },
   "cross_disciplinary_pairing": {
-    "discipline": "education",
+    "discipline": "agriculture",
     "load_bearing": true,
-    "description": "Brief description of how your model serves a real-world domain."
+    "description": "Offline agricultural decision support for smallholder farmers and extension workers operating with intermittent connectivity and commodity laptops."
   },
   "test_prompts": [
     {
-      "prompt_id": "tp_001",
-      "prompt": "Write a Python function that reads a CSV file and returns the column with the highest mean value."
+      "prompt_id": "agri_001",
+      "prompt": "A smallholder maize farmer notices yellowing on older lower leaves while newer leaves remain greener. Give three plausible causes, explain the field observations that would help distinguish them, and suggest low-cost next steps. State uncertainty clearly and say when local agronomic advice is needed."
     },
     {
-      "prompt_id": "tp_002",
-      "prompt": "Explain the difference between a list and a tuple in Python, and give one example where each is the better choice."
+      "prompt_id": "agri_002",
+      "prompt": "A farmer with two hectares of maize wants to reduce post-harvest losses without reliable grid power. Propose a practical low-cost drying, handling, and storage plan, including moisture or dryness checks, pest prevention, and warning signs that stored grain is becoming unsafe."
     }
   ],
   "model": {
-    "name": "SmolLM2-135M-Instruct-Q4_K_M",
+    "name": "Qwen3-1.7B-Q4_K_M",
     "runtime": "llama.cpp",
     "quantization": "GGUF Q4_K_M",
-    "parameters_estimate": "135M",
+    "parameters_estimate": "1.7B",
     "packaging": "binary_bundle"
   },
   "_runtime": {
-    "model_path": "model/SmolLM2-135M-Instruct-Q4_K_M.gguf"
+    "model_path": "model/Qwen3-1.7B-Q4_K_M.gguf"
   }
 }
